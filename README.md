@@ -3,6 +3,8 @@
 This is a test web application for authenticating with Mojang/Minecraft via
 Xbox Live and OAuth2.
 
+The login flow was mostly implemented using [wiki.vg](https://wiki.vg/Microsoft_Authentication_Scheme) as a guide.
+
 ## Prerequisites
 Before starting, you will first need to obtain an
 [OAuth 2.0](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
