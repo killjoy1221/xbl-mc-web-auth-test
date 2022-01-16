@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "ms-xbl-mc-auth-test"
+name = "xbl-mc-web-auth-test"
 version = "0.1.0"
-description = ""
+description = "Test application for authenticating a web application with xbox live and minecraft"
 authors = ["Matthew Messinger <mattmess1221@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = {extras = ["jinja"], version = "^0.71.0"}
+fastapi = "^0.71.0"
 uvicorn = "^0.17.0"
 Authlib = "^0.15.5"
 httpx = "^0.21.3"

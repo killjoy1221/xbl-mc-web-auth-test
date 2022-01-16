@@ -9,6 +9,8 @@ Before starting, you will first need to obtain an
 Client ID & secret by creating a
 [Microsoft Azure application](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app). 
 
+When prompted, use http://localhost/oauth2-callback as the redirect uri
+
 ## Configuring
 
 After obtaining your client id and secret, create a file named `.env` with the following values:
