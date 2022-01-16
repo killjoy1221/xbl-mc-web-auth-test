@@ -1,9 +1,10 @@
 import datetime
 import enum
-import uuid
 
 import httpx
 from pydantic import BaseModel
+
+from .models import MinecraftProfile
 
 XBOX_AUTH_BASE = "https://{0}.auth.xboxlive.com/{0}/{1}"
 XBOX_USER_AUTH = XBOX_AUTH_BASE.format("user", "authenticate")
@@ -42,24 +43,6 @@ class MinecraftAuth(BaseModel):
     expires_in: int
 
 
-class MinecraftEntitlement(BaseModel):
-    name: str
-    signature: str  # jwt sig
-
-
-class MinecraftEntitlements(BaseModel):
-    items: list[MinecraftEntitlement]
-    signature: str  # jwt sig
-    keyId: str
-
-
-class MinecraftProfile(BaseModel):
-    id: uuid.UUID
-    name: str
-    skins: list[dict]
-    capes: list[dict]
-
-
 class AuthFlow:
     def __init__(self, client: httpx.AsyncClient):
         self.client = client
@@ -95,7 +78,7 @@ class AuthFlow:
 
         return cls.parse_obj(response.json())
 
-    async def auth_minecraft(self, xbox_auth: XboxAuth):
+    async def auth_minecraft(self, xbox_auth: XboxAuth) -> MinecraftAuth:
         userhash, xsts_token = xbox_auth.DisplayClaims["xui"][0]["uhs"], xbox_auth.Token
         response = await self.client.post(
             MC_AUTH_XBOX,
@@ -103,14 +86,14 @@ class AuthFlow:
         )
         return MinecraftAuth.parse_obj(response.json())
 
-    async def get_minecraft_profile(self, mc_auth: MinecraftAuth):
+    async def get_minecraft_profile(self, mc_auth: MinecraftAuth) -> MinecraftProfile:
         response = await self.client.get(
             MC_PROFILE,
             headers={"Authorization": f"Bearer {mc_auth.access_token}"},
         )
         return MinecraftProfile.parse_obj(response.json())
 
-    async def login(self, xbl_access_token: str):
+    async def login(self, xbl_access_token: str) -> MinecraftProfile:
         """Start the lengthy authorization process."""
         response = await self.auth_xbl(xbl_access_token)
         response = await self.auth_xsts(response)

@@ -15,7 +15,8 @@ When prompted, use http://localhost/oauth2-callback as the redirect uri
 
 ## Configuring
 
-After obtaining your client id and secret, create a file named `.env` with the following values:
+After obtaining your client id and secret, set the following environment
+variables or create a file named `.env` with the following values:
 
 ```
 XBOXLIVE_CLIENT_ID=<client_id>
