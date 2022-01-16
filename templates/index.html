@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minecraft Test Auth</title>
+    <style>
+        table, td, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin: 1em;
+            padding: 0 .5em;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    console.log({{ profile.json() | safe }})
+</script>
+
+<h1>Minecraft Test Auth</h1>
+<p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+{% macro table(dict_list) %}
+    {% for d in dict_list %}
+        <table>
+            {% for key, value in d.items() %}
+                <tr>
+                    <th>{{ key | title }}</th>
+                    {% if value is sequence and value is not string %}
+                        <td>{{ table(value) }}</td>
+                    {% else %}
+                        <td>
+                            {% if value is link %}
+                                <img src="{{ value }}" alt="{{ value }}">
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+{% endmacro %}
+
+{{ table([profile.dict()]) }}
+
+</body>
+</html>
