@@ -30,7 +30,7 @@ Use [poetry](https://python-poetry.org) to install dependencies and run
 poetry install
 poetry shell
 
-uvicorn main:app
+uvicorn app:app
 # or
-python main.py
+python -m app
 ```
