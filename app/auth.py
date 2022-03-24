@@ -28,7 +28,8 @@ except ValidationError:
     raise RuntimeError(
         """Environment is mis-configured!
 
-To configure the environment, create a file named .env and fill it with the following values.
+To configure the environment, create a file named .env and fill it with the
+following values.
 
     XBOXLIVE_CLIENT_ID=<client_id>
     XBOXLIVE_CLIENT_SECRET=<client_secret>
@@ -75,20 +76,19 @@ async def login_callback(request: Request):
         request.session["login-error"] = str(e)
     except mcauth.XboxLoginError as e:
         request.session.clear()
-        request.session["login-error"] = get_x_error_message(e.err.XErr)
+        message = get_x_error_message(e.err.XErr)
+        request.session["login-error"] = f"{e.err.XErr}: {message}"
     return RedirectResponse(request.url_for("login_error"))
 
 
 def get_x_error_message(code: mcauth.XError):
     match code:
         case mcauth.XError.NO_ACCOUNT:
-            return f"{code}: This account is not associated with a Xbox Live account."
+            return "This account is not associated with a Xbox Live account."
         case mcauth.XError.REGION:
-            return (
-                f"{code}: This account is in a region where Xbox Live is not available."
-            )
+            return "This account is in a region where Xbox Live is not available."
         case mcauth.XError.CHILD:
-            return f"{code}: This account is a child and must be added to a Family before proceeding."
+            return "This account is a child and must be added to a Family."
 
 
 @router.route("/login-error")

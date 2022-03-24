@@ -1,8 +1,8 @@
-from fastapi import Depends, FastAPI, Request, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from starlette.middleware.sessions import SessionMiddleware
 
-from .models import MinecraftProfile
 from . import auth
+from .models import MinecraftProfile
 from .templates import templates
 
 app = FastAPI(
@@ -14,7 +14,10 @@ app.include_router(auth.router)
 
 
 @app.get("/")
-async def root(request: Request, profile: MinecraftProfile | None = Depends(auth.get_user_profile)):
+async def root(
+    request: Request,
+    profile: MinecraftProfile | None = Depends(auth.get_user_profile),
+):
     context = {
         "request": request,
         "profile": profile,
@@ -23,7 +26,9 @@ async def root(request: Request, profile: MinecraftProfile | None = Depends(auth
 
 
 @app.get("/user", response_model=MinecraftProfile)
-async def get_user_profile(profile: MinecraftProfile | None = Depends(auth.get_user_profile)):
+async def get_user_profile(
+    profile: MinecraftProfile | None = Depends(auth.get_user_profile),
+) -> MinecraftProfile:
     if profile is None:
         raise HTTPException(401)
     return profile
